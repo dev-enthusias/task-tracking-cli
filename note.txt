@@ -1,0 +1,7 @@
+Documentation for all the things I learnt doing this.
+
+mkdir directory, cd directory, npm init -y
+touch index.js
+vim index.js => (#!/usr/bin/env node) => adds shebang line necessary for runnning code directly from the terminal
+npm link => run it on the terminal to make it usable anywhere
+now call your app name that you used inside package.json file bin

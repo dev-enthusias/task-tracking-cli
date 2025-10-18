@@ -1,0 +1,21 @@
+{
+  "name": "task-cli",
+  "version": "1.0.0",
+  "description": "A task tracker CLI tool",
+  "main": "index.js",
+  "type": "module",
+  "bin": {
+    "task-cli": "./index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "task tracker",
+    "cli",
+    "task",
+    "tracker"
+  ],
+  "author": "Anakor Joshua",
+  "license": "ISC"
+}
