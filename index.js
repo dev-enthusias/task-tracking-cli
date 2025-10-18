@@ -26,8 +26,6 @@ const yellow = "\x1b[33m";
 // Get all tasks from database
 const tasks = JSON.parse(fs.readFileSync(`${__dirname}/data/tasks.json`));
 
-const arg = process.argv;
-
 // Add new task
 // tasks.push({
 //   id: "A unique identifier for the taskssdfa",
@@ -45,15 +43,44 @@ const arg = process.argv;
 // console.log("Task added successfully");
 
 //Our status => in-progress | done | todo
+function app(arg) {
+  if (arg[2] === "list") {
+    if (arg[3] === "done") {
+      tasks
+        .filter((t) => t.status === "done")
+        .map((d, i) => console.log(`${i + 1} ${d.description}\n`));
 
-if (arg[2] === "list") {
-  console.log(`${yellow}[in progress]${reset} ${green}[done]${reset} [todo]\n`);
+      return;
+    }
 
-  tasks.forEach((t, i) =>
-    t.status === "in-progress"
-      ? console.log(`${i + 1} ${yellow}${t.description}...${reset}\n`)
-      : t.status === "done"
-      ? console.log(`${i + 1} ${green}${t.description}${reset}\n`)
-      : console.log(`${i + 1} ${t.description}\n`)
-  );
+    if (arg[3] === "in-progress") {
+      tasks
+        .filter((t) => t.status === "in-progress")
+        .map((p, i) => console.log(`${i + 1} ${p.description}\n`));
+
+      return;
+    }
+
+    if (arg[3] === "todo") {
+      tasks
+        .filter((t) => t.status === "todo")
+        .map((p, i) => console.log(`${i + 1} ${p.description}\n`));
+
+      return;
+    }
+
+    console.log(
+      `${yellow}[in progress]${reset} ${green}[done]${reset} [todo]\n`
+    );
+
+    tasks.forEach((t, i) =>
+      t.status === "in-progress"
+        ? console.log(`${i + 1} ${yellow}${t.description}...${reset}\n`)
+        : t.status === "done"
+        ? console.log(`${i + 1} ${green}${t.description}${reset}\n`)
+        : console.log(`${i + 1} ${t.description}\n`)
+    );
+    return;
+  }
 }
+app(process.argv);
