@@ -14,17 +14,6 @@ const blue = "\x1b[34m";
 const green = "\x1b[32m";
 const yellow = "\x1b[33m";
 
-// Welcome Note
-// console.log(`
-// Welcome to Task Tracker
-
-// This is a CLI tool to help developers track
-// their progress on tasks on the CLI instead of toggling,
-// GUI and thier code editor, it features
-// colorful text that points you to what is done, in progress,
-// and ongoing
-// `);
-
 // Get all tasks from database
 const tasks = JSON.parse(fs.readFileSync(`${__dirname}/data/tasks.json`));
 
@@ -38,6 +27,19 @@ function updateDB(message) {
 
 // available status => in-progress | done | todo
 function app(arg) {
+  // Welcome Note
+  if (!arg[2]) {
+    console.log(`
+      Welcome to Task Tracker
+
+      This is a CLI tool to help developers track
+      their progress on tasks on the CLI instead of toggling,
+      GUI and thier code editor, it features
+      colorful text that points you to what is done, in progress,
+      and ongoing
+    `);
+  }
+
   // Create
   if (arg[2] === "add") {
     if (arg.length < 4)
@@ -96,7 +98,7 @@ function app(arg) {
   if (arg[2] === "update") {
     if (arg.length < 5) {
       console.log(
-        `${red}Wrong command${reset} \nDo you mean: ${blue}task-cli update id "New description"`
+        `${red}Wrong command${reset} \nDo you mean: ${blue}task-cli update id "New description"${reset}`
       );
       return;
     }
@@ -106,6 +108,26 @@ function app(arg) {
     tasks[index].updatedAt = new Date().toISOString();
 
     updateDB(`Task (ID: ${arg[3]}) updated successfully`);
+  }
+
+  // Update task status
+  if (arg[2] === "mark-in-progress" || arg[2] === "mark-done") {
+    if (arg.length < 4) {
+      console.log(
+        `${red}Wrong command${reset} \nDo you mean: ${blue}task-cli ${arg[2]} id${reset}`
+      );
+      return;
+    }
+
+    const index = tasks.findIndex((task) => arg[3] === task.id);
+
+    tasks[index].status =
+      arg[2] === "mark-in-progress" ? "in-progress" : "done";
+    console.log(arg[2]);
+    console.log(arg[2].split("-").splice(0, 1).join("-"));
+    tasks[index].updatedAt = new Date().toISOString();
+
+    updateDB(`Task status (ID: ${arg[3]}) updated successfully`);
   }
 
   // Delete

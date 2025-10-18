@@ -84,7 +84,8 @@
   {
     "id": "task-13",
     "description": "finish akscons",
-    "status": "todo",
-    "createdAt": "2025-10-18T21:16:48.637Z"
+    "status": "in-progress",
+    "createdAt": "2025-10-18T21:16:48.637Z",
+    "updatedAt": "2025-10-18T23:20:28.730Z"
   }
 ]
