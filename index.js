@@ -8,7 +8,9 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Colors
+const red = "\x1b[31m";
 const reset = "\x1b[0m";
+const blue = "\x1b[34m";
 const green = "\x1b[32m";
 const yellow = "\x1b[33m";
 
@@ -26,24 +28,35 @@ const yellow = "\x1b[33m";
 // Get all tasks from database
 const tasks = JSON.parse(fs.readFileSync(`${__dirname}/data/tasks.json`));
 
-// Add new task
-// tasks.push({
-//   id: "A unique identifier for the taskssdfa",
-//   description: "A short description of the task",
-//   status: "The status of the task (todo, in-progress, done)",
-//   createdAt: "The date and time when the task was created",
-//   updatedAt: "The date and time when the task was last updated",
-// });
+function updateDB(message) {
+  fs.writeFileSync(
+    `${__dirname}/data/tasks.json`,
+    JSON.stringify(tasks, null, 2)
+  );
+  console.log(message);
+}
 
-// Update tasks in database
-// fs.writeFileSync(
-//   `${__dirname}/data/tasks.json`,
-//   JSON.stringify(tasks, null, 2)
-// );
-// console.log("Task added successfully");
-
-//Our status => in-progress | done | todo
+// available status => in-progress | done | todo
 function app(arg) {
+  // Create
+  if (arg[2] === "add") {
+    if (arg.length < 4)
+      console.log(`${red}Please provide a task description${reset}`);
+
+    // Accepts multiple tasks args
+    arg.slice(3).map((task) =>
+      tasks.push({
+        id: `task-${tasks.length + 1}`,
+        description: task,
+        status: "todo",
+        createdAt: new Date().toISOString(),
+      })
+    );
+
+    updateDB(`Task added successfully`);
+  }
+
+  // Read
   if (arg[2] === "list") {
     if (arg[3] === "done") {
       tasks
@@ -69,10 +82,6 @@ function app(arg) {
       return;
     }
 
-    console.log(
-      `${yellow}[in progress]${reset} ${green}[done]${reset} [todo]\n`
-    );
-
     tasks.forEach((t, i) =>
       t.status === "in-progress"
         ? console.log(`${i + 1} ${yellow}${t.description}...${reset}\n`)
@@ -81,6 +90,37 @@ function app(arg) {
         : console.log(`${i + 1} ${t.description}\n`)
     );
     return;
+  }
+
+  // Update
+  if (arg[2] === "update") {
+    if (arg.length < 5) {
+      console.log(
+        `${red}Wrong command${reset} \nDo you mean: ${blue}task-cli update id "New description"`
+      );
+      return;
+    }
+
+    const index = tasks.findIndex((task) => arg[3] === task.id);
+    tasks[index].description = arg[4];
+    tasks[index].updatedAt = new Date().toISOString();
+
+    updateDB(`Task (ID: ${arg[3]}) updated successfully`);
+  }
+
+  // Delete
+  if (arg[2] === "delete") {
+    if (arg.length < 4) {
+      console.log(
+        `${red}Wrong command${reset} \nDo you mean: ${blue}task-cli delete id`
+      );
+      return;
+    }
+
+    const index = tasks.findIndex((task) => arg[3] === task.id);
+    tasks.splice(index, 1);
+
+    updateDB(`Task (ID: ${arg[3]}) deleted successfully`);
   }
 }
 app(process.argv);
