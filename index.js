@@ -47,7 +47,7 @@ const arg = process.argv;
 //Our status => in-progress | done | todo
 
 if (arg[2] === "list") {
-  console.log(`${yellow}[in progress]${reset} ${green}[done]${reset} [todo]`);
+  console.log(`${yellow}[in progress]${reset} ${green}[done]${reset} [todo]\n`);
 
   tasks.forEach((t, i) =>
     t.status === "in-progress"
