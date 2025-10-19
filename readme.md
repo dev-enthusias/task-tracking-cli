@@ -2,6 +2,7 @@
 
 A simple and colorful command-line task manager built with node.js.
 Easily add, delete, create and update task --all from your terminal.
+The project inspiration was gotten from [roadmap.sh](https://roadmap.sh/projects/task-tracker)
 
 ## Table of Content
 
